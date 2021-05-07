@@ -6,7 +6,10 @@
 
 package permutations
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type PossibleValues []string
 type ParamID string
@@ -22,16 +25,18 @@ func getAllPossibleParamValues(id ParamID, possibleValues PossibleValues) Possib
 }
 
 func permute(x []PossibleValues) PossibleValues {
-	if len(x) == 1 {
-		return x[0]
-	}
-
 	var results PossibleValues
-	for i := 0; i < len(x); i++ {
-		perm := permute(x[1:])
-		for j := 0; j < len(x[0]); j++ {
-			for k := 0; k < len(perm); k++ {
-				results = append(results, fmt.Sprintf("%s %s", x[0][j], perm[k]))
+	if len(x) == 2 {
+		for i := 0; i < len(x[0]); i++ {
+			for j := 0; j < len(x[1]); j++ {
+				results = append(results, fmt.Sprintf("%s %s", x[0][i], x[1][j]))
+			}
+		}
+	} else {
+		subResults := permute(x[1:])
+		for i := 0; i < len(x[0]); i++ {
+			for j := 0; j < len(subResults); j++ {
+				results = append(results, fmt.Sprintf("%s %s", x[0][i], subResults[j]))
 			}
 		}
 	}
@@ -44,12 +49,16 @@ func Get(params Params) Permutations {
 	for id := range params {
 		paramsList = append(paramsList, id)
 	}
+	fmt.Printf("List of params: %s\n", paramsList)
 
 	var listSupportedValues []PossibleValues
 	for i := 0; i < len(paramsList); i++ {
 		currentID := paramsList[i]
 		paramValues := getAllPossibleParamValues(currentID, params[currentID])
 		listSupportedValues = append(listSupportedValues, paramValues)
+	}
+	for _, values := range listSupportedValues {
+		fmt.Printf("Possible values: %s\n", string(strings.Join(values, " ")))
 	}
 
 	return Permutations(permute(listSupportedValues))
