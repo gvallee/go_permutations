@@ -8,7 +8,6 @@ package permutations
 
 import (
 	"fmt"
-	"strings"
 )
 
 type PossibleValues []string
@@ -49,16 +48,12 @@ func Get(params Params) Permutations {
 	for id := range params {
 		paramsList = append(paramsList, id)
 	}
-	fmt.Printf("List of params: %s\n", paramsList)
 
 	var listSupportedValues []PossibleValues
 	for i := 0; i < len(paramsList); i++ {
 		currentID := paramsList[i]
 		paramValues := getAllPossibleParamValues(currentID, params[currentID])
 		listSupportedValues = append(listSupportedValues, paramValues)
-	}
-	for _, values := range listSupportedValues {
-		fmt.Printf("Possible values: %s\n", string(strings.Join(values, " ")))
 	}
 
 	return Permutations(permute(listSupportedValues))
