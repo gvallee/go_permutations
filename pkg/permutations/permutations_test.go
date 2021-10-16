@@ -23,3 +23,14 @@ func TestGet(t *testing.T) {
 	}
 	fmt.Printf("Total number of permutations: %d\n", len(permutations))
 }
+
+func TestGetOneEntry(t *testing.T) {
+	params := make(Params)
+	params["A"] = []string{"0", "1", "2", "3", "4"}
+
+	permutations := Get(params)
+	for idx, p := range permutations {
+		fmt.Printf("Permutation %d: %s\n", idx, p)
+	}
+	fmt.Printf("Total number of permutations: %d\n", len(permutations))
+}

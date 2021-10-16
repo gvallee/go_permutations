@@ -25,13 +25,18 @@ func getAllPossibleParamValues(id ParamID, possibleValues PossibleValues) Possib
 
 func permute(x []PossibleValues) PossibleValues {
 	var results PossibleValues
-	if len(x) == 2 {
+	switch len(x) {
+	case 1:
+		for _, v := range x {
+			results = append(results, v...)
+		}
+	case 2:
 		for i := 0; i < len(x[0]); i++ {
 			for j := 0; j < len(x[1]); j++ {
 				results = append(results, fmt.Sprintf("%s %s", x[0][i], x[1][j]))
 			}
 		}
-	} else {
+	default:
 		subResults := permute(x[1:])
 		for i := 0; i < len(x[0]); i++ {
 			for j := 0; j < len(subResults); j++ {
